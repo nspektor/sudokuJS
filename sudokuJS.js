@@ -1505,8 +1505,9 @@
 							$("#input-" + alreadyExistingCellInHouseWithDigit + ", #input-"+id)
 								.addClass("board-cell--error");
 							//make as incorrect in UI
-							log("player " + playerTurn + " loses. Move validates sudoku rules")
-
+							$("#message").text("player " + playerTurn + " loses. Move violates sudoku rules")
+							log("player " + playerTurn + " loses. Move violates sudoku rules")
+							log("#input-" + alreadyExistingCellInHouseWithDigit + ", #input-"+id)
 
 							//input was incorrect, so don't update our board model
 							return;
@@ -1516,8 +1517,11 @@
 					prevMoveRow = currMoveRow
 					prevMoveCol = currMoveCol
 					playerTurn = playerTurn === 1 ? 2: 1
+					$("#message").text("player "+ playerTurn + "'s turn")
 				}
 				else{
+					$("#message").text("player " + playerTurn + " loses. Must play in same " +
+							"row or column as previous move if there is space available.");
 					log("player " + playerTurn + " loses. Must play in same " +
 						"row or column as previous move if there is space available.")
 				}
@@ -1531,6 +1535,7 @@
 				//check if that finished board
 				if(isBoardFinished()){
 					boardFinished = true;
+					$("#message").text("player " + playerTurn + " wins by finishing the board!");
 					log("player " + playerTurn + " wins by finishing the board!");
 					if(typeof opts.boardFinishedFn === "function"){
 						opts.boardFinishedFn({
