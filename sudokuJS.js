@@ -38,6 +38,9 @@
 		/*
 		 * variables
 		 *-----------*/
+		var playerTurn = 1; // or 2
+		var prevMoveRow = null;
+		var prevMoveCol = null;
 		opts = opts || {};
 		var solveMode = SOLVE_MODE_STEP,
 				difficulty = "unknown",
@@ -89,7 +92,7 @@
 			boardNumbers, // array of 1-9 by default, generated in initBoard
 
 		//indexes of cells in each house - generated on the fly based on boardSize
-			houses = [
+			“houses = [
 				//hor. rows
 				[],
 				//vert. rows
@@ -529,6 +532,26 @@
 			return false;
 		};
 
+		/* inSameRowOrColAsPrev
+        * --------------
+        *  returns true if it is in the same row or column as the previous move or there was no space, false if not
+        * -----------------------------------------------------------------*/
+		var validCell = function(curr_row, curr_col, prev_row, prev_col){
+			if (board[prev_row].val != null){
+				if (curr_row === prev_row)
+					return true;
+				else
+					return false;
+			}
+			if (board[prev_col].val != null) {
+				if (curr_col === prev_col)
+					return true;
+				else
+					return false;
+				return false;
+			}
+		};
+
 
 
 		 /* housesWithCell
@@ -538,7 +561,7 @@
 		 var housesWithCell = function(cellIndex){
 			var boxSideSize = Math.sqrt(boardSize);
 			var houses = [];
-			//horisontal row
+			//horizontal row
 			var hrow = Math.floor(cellIndex/boardSize);
 			houses.push(hrow);
 			//vertical row
@@ -549,6 +572,18 @@
 			houses.push(box);
 
 			return houses;
+		};
+
+		/* rowAndColWithCell
+        * --------------
+        *  returns houses that a cell belongs to
+        * -----------------------------------------------------------------*/
+		var rowAndColWithCell = function(cellIndex){
+			//horizontal row
+			var row = Math.floor(cellIndex/boardSize);
+			//vertical row
+			var column = Math.floor(cellIndex%boardSize);
+			return row, column;
 		};
 
 
@@ -1440,33 +1475,44 @@
 				return;
 			}
 
-			//log(id+": "+val +" entered.");
+			log(id+": "+val +" entered.");
 
 			var candidates = getNullCandidatesList(); //[null,null....null];
 
 
 			if (val > 0) { //invalidates Nan
-				//check that this doesn't make board incorrect
-				var temp = housesWithCell(id);
-				//for each type of house
-				for(var i=0; i < houses.length; i++){
+				var rowAndCol = rowAndColWithCell(id);
+				if (validCell(rowAndCol, prevMoveRow, prevMoveCol)){
 
-					if(indexInHouse(val, houses[i][temp[i]])){
-						//digit already in house - board incorrect with user input
-						// log("board incorrect!");
-						var alreadyExistingCellInHouseWithDigit = houses[i][temp[i]][indexInHouse(val, houses[i][temp[i]])];
+					//check that this doesn't make board incorrect
+					var temp = housesWithCell(id);
+					//for each type of house
+					for(var i=0; i < houses.length; i++){
 
-						//this happens in candidate mode, if we highlight on ui board before entering value, and user then enters before us.
-						if(alreadyExistingCellInHouseWithDigit === id)
-							continue;
+						if(indexInHouse(val, houses[i][temp[i]])){
+							//digit already in house - board incorrect with user input
+							// edit this to comply with new logic
+							//
+							log("board incorrect!");
+							var alreadyExistingCellInHouseWithDigit = houses[i][temp[i]][indexInHouse(val, houses[i][temp[i]])];
 
-						$("#input-" + alreadyExistingCellInHouseWithDigit + ", #input-"+id)
-							.addClass("board-cell--error");
-						//make as incorrect in UI
+							//this happens in candidate mode, if we highlight on ui board before entering value, and user then enters before us.
+							if(alreadyExistingCellInHouseWithDigit === id)
+								continue;
 
-						//input was incorrect, so don't update our board model
-						return;
+							$("#input-" + alreadyExistingCellInHouseWithDigit + ", #input-"+id)
+								.addClass("board-cell--error");
+							//make as incorrect in UI
+							// and add code to print out who lost
+
+							//input was incorrect, so don't update our board model
+							return;
+						}
 					}
+				}
+				else{
+					log("player " + playerTurn + " loses. Must play in same " +
+						"row or column as previous move if there is space available.")
 				}
 
 				//remove candidates..
@@ -1478,7 +1524,7 @@
 				//check if that finished board
 				if(isBoardFinished()){
 					boardFinished = true;
-					log("user finished board!");
+					log("player " + playerTurn + " wins by finishing the board!");
 					if(typeof opts.boardFinishedFn === "function"){
 						opts.boardFinishedFn({
 							//we rate the board via what strategies was used to solve it
@@ -1521,6 +1567,10 @@
 			$board.toggleClass("showCandidates");
 			candidatesShowing = !candidatesShowing;
 		};
+
+		var areRowAndColumnFull = function(){
+
+		}
 
 		 /* analyzeBoard
 		  * solves a copy of the current board(without updating the UI),
