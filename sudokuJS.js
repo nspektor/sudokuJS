@@ -5,11 +5,6 @@
 
 (function (window, $, undefined) {
 	'use strict';
-	/*TODO:
-		--possible additions--
-		toggle edit candidates
-		undo/redo
-	*/
 
 	/**
 	* Define a jQuery plugin
@@ -538,20 +533,22 @@
         * -----------------------------------------------------------------*/
 		var validCell = function(curr_row, curr_col, prev_row, prev_col){
 			if(prev_row == null || prev_col == null){
+				// first move
 				return true;
 			}
 			if (board[prev_row].val != null){
+				// row has space
 				if (curr_row === prev_row)
 					return true;
-				else
-					return false;
 			}
 			if (board[prev_col].val != null) {
+				// col has space
 				if (curr_col === prev_col)
 					return true;
-				else
-					return false;
-				return false;
+			}
+			if (board[prev_row].val != null && board[prev_col].val != null){
+				// row and column have space but player moved elsewhere
+				return false
 			}
 		};
 
@@ -1485,6 +1482,10 @@
 
 			if (val > 0) { //invalidates Nan
 				var [currMoveRow, currMoveCol] = rowAndColWithCell(id);
+				log("prev move row: " + prevMoveRow)
+				log("prev move col: " + prevMoveCol)
+				log("curr move row: " + currMoveRow)
+				log("curr move col: " + currMoveCol)
 				if (validCell(currMoveRow, currMoveCol, prevMoveRow, prevMoveCol)){
 
 					//check that this doesn't make board incorrect
@@ -1513,6 +1514,7 @@
 							return;
 						}
 					}
+
 					prevMoveRow = currMoveRow
 					prevMoveCol = currMoveCol
 					playerTurn = playerTurn === 1 ? 2: 1
@@ -1574,10 +1576,6 @@
 			$board.toggleClass("showCandidates");
 			candidatesShowing = !candidatesShowing;
 		};
-
-		var areRowAndColumnFull = function(){
-
-		}
 
 		 /* analyzeBoard
 		  * solves a copy of the current board(without updating the UI),
