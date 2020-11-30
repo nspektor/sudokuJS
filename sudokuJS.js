@@ -536,15 +536,13 @@
 				// first move
 				return true;
 			}
-			if (board[prev_row].val != null){
-				// row has space
-				if (curr_row === prev_row)
-					return true;
+			if (board[prev_row].val != null && curr_row === prev_row){
+				// row has space and player went in same row
+				return true;
 			}
-			if (board[prev_col].val != null) {
-				// col has space
-				if (curr_col === prev_col)
-					return true;
+			if (board[prev_col].val != null && curr_col === prev_col){
+				// col has space and player went in same column
+				return true;
 			}
 			if (board[prev_row].val != null && board[prev_col].val != null){
 				// row and column have space but player moved elsewhere
