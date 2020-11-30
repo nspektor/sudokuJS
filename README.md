@@ -4,9 +4,9 @@
 
 To Do
 - Timer to record time elapsed for each player
-- Game description and instructions
 - Color logic for different players' moves 
 - Make sure the game works as a pop-up in drecco
 - Highlight most recent move
 - Board Size Variable
+- Disallow editing already placed numbers
 
