@@ -9,4 +9,8 @@ To Do
 - Highlight most recent move
 - Board Size Variable
 - Disallow editing already placed numbers
+- stop allowing edits after a player loses
+- grey out and disable the parts of the board that aren't allowed by the row/col rule.
+- Make it so the game checks logic against the whole board (not just the original board)
+
 
