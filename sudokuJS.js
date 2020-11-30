@@ -92,7 +92,7 @@
 			boardNumbers, // array of 1-9 by default, generated in initBoard
 
 		//indexes of cells in each house - generated on the fly based on boardSize
-			“houses = [
+			houses = [
 				//hor. rows
 				[],
 				//vert. rows
@@ -537,6 +537,9 @@
         *  returns true if it is in the same row or column as the previous move or there was no space, false if not
         * -----------------------------------------------------------------*/
 		var validCell = function(curr_row, curr_col, prev_row, prev_col){
+			if(prev_row == null || prev_col == null){
+				return true;
+			}
 			if (board[prev_row].val != null){
 				if (curr_row === prev_row)
 					return true;
@@ -583,7 +586,7 @@
 			var row = Math.floor(cellIndex/boardSize);
 			//vertical row
 			var column = Math.floor(cellIndex%boardSize);
-			return row, column;
+			return [row, column];
 		};
 
 
@@ -1481,8 +1484,8 @@
 
 
 			if (val > 0) { //invalidates Nan
-				var rowAndCol = rowAndColWithCell(id);
-				if (validCell(rowAndCol, prevMoveRow, prevMoveCol)){
+				var [currMoveRow, currMoveCol] = rowAndColWithCell(id);
+				if (validCell(currMoveRow, currMoveCol, prevMoveRow, prevMoveCol)){
 
 					//check that this doesn't make board incorrect
 					var temp = housesWithCell(id);
@@ -1503,12 +1506,16 @@
 							$("#input-" + alreadyExistingCellInHouseWithDigit + ", #input-"+id)
 								.addClass("board-cell--error");
 							//make as incorrect in UI
-							// and add code to print out who lost
+							log("player " + playerTurn + " loses. Move validates sudoku rules")
+
 
 							//input was incorrect, so don't update our board model
 							return;
 						}
 					}
+					prevMoveRow = currMoveRow
+					prevMoveCol = currMoveCol
+					playerTurn = playerTurn === 1 ? 2: 1
 				}
 				else{
 					log("player " + playerTurn + " loses. Must play in same " +
