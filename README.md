@@ -3,10 +3,8 @@
 ### Game Created by Dennis Shasha: [description](https://cs.nyu.edu/courses/fall20/CSCI-GA.2965-001/sudokill)
 
 To Do
-- Timer to record time elapsed for each player - nellie
-- Make sure the game works as a pop-up in drecco - nellie
 - Make it so the game checks logic against the whole board (not just the original board) - nellie
-- prettify/clarify the UI - nellie
+- prettify/clarify the UI in the popup and page - nellie
 - Board Size Variable - optional
 - Color logic for different players' moves - nehemiah
 - Highlight most recent move - nehemiah
