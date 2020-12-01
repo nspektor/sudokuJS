@@ -198,7 +198,7 @@
             var boxSideSize = Math.sqrt(boardSize);
 
             for (var i = 0; i < boardSize; i++) {
-                var hrow = []; //horisontal row
+                var hrow = []; //horizontal row
                 var vrow = []; //vertical row
                 var box = [];
                 for (var j = 0; j < boardSize; j++) {
@@ -260,7 +260,7 @@
                     board[j] = {
                         val: cellVal,
                         candidates: candidates
-                        //title: "" possibl add in 'A1. B1...etc
+                        //title: "" possibly add in 'A1. B1...etc
                     };
                 }
             }
@@ -518,6 +518,7 @@
          *  NOTE: careful evaluating returned index is IN row, as 0==false.
          * -----------------------------------------------------------------*/
         var indexInHouse = function (digit, house) {
+            // log("digit: " + digit + ", house: " + house)
             for (var i = 0; i < boardSize; i++) {
                 if (board[house[i]].val === digit)
                     return i;
@@ -543,8 +544,10 @@
                 // col has space and player went in same column
                 return true;
             }
-            if (board[prev_row].val != null && board[prev_col].val != null) {
+            // if (board[prev_row].val != null && board[prev_col].val != null) {
+            else{
                 // row and column have space but player moved elsewhere
+                log("wrong col/row")
                 return false
             }
         };
@@ -1495,29 +1498,31 @@
                 log("curr move row: " + currMoveRow)
                 log("curr move col: " + currMoveCol)
                 if (validCell(currMoveRow, currMoveCol, prevMoveRow, prevMoveCol)) {
-
                     //check that this doesn't make board incorrect
-                    var temp = housesWithCell(id);
+                    var housesOfCurrCell = housesWithCell(id);
                     //for each type of house
                     for (var i = 0; i < houses.length; i++) {
-
-                        if (indexInHouse(val, houses[i][temp[i]])) {
+                        var currIndexInHouse = indexInHouse(val, houses[i][housesOfCurrCell[i]])
+                        // log("index in house: " + currIndexInHouse)
+                        if (currIndexInHouse !== false) {
                             //digit already in house - board incorrect with user input
                             // edit this to comply with new logic
                             //
                             log("board incorrect!");
-                            var alreadyExistingCellInHouseWithDigit = houses[i][temp[i]][indexInHouse(val, houses[i][temp[i]])];
+                            var alreadyExistingCellInHouseWithDigit = houses[i][housesOfCurrCell[i]][currIndexInHouse];
 
                             //this happens in candidate mode, if we highlight on ui board before entering value, and user then enters before us.
-                            if (alreadyExistingCellInHouseWithDigit === id)
+                            if (alreadyExistingCellInHouseWithDigit === id) {
+                                log("something about candidate mode")
                                 continue;
+                            }
 
                             $("#input-" + alreadyExistingCellInHouseWithDigit + ", #input-" + id)
                                 .addClass("board-cell--error");
-                            //make as incorrect in UI
+                            //mark as incorrect in UI
                             $("#message").text("player " + playerTurn + " loses. Move violates sudoku rules")
                             log("player " + playerTurn + " loses. Move violates sudoku rules")
-                            log("#input-" + alreadyExistingCellInHouseWithDigit + ", #input-" + id)
+                            log("bad move at #input-" + alreadyExistingCellInHouseWithDigit + ", #input-" + id)
                             disableGame()
                             //input was incorrect, so don't update our board model
                             return;
@@ -1535,6 +1540,7 @@
                         "row or column as previous move if there is space available.")
                 }
 
+                setBoardCell(id, val);
                 //remove candidates..
                 input.siblings(".candidates").html(buildCandidatesString(candidates));
                 //update board
