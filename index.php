@@ -44,7 +44,7 @@
                 <li> The first player to make a move that violates the Sudoku rules loses. </li>
             </ul>
             <br>
-            <p> Press pop-up to access game window. To begin: Simply input a number into one of the squares</p>
+            <p> Press pop-up to access game window. To begin: Player 1 should simply input a number into one of the squares</p>
 
         </div>
 
