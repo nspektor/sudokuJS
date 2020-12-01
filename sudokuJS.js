@@ -1546,6 +1546,8 @@
                 //update board
                 board[id].candidates = candidates;
                 board[id].val = val;
+                resetCandidates();
+                visualEliminationOfCandidates();
 
                 //check if that finished board
                 if (isBoardFinished()) {
