@@ -36,6 +36,8 @@
 		var playerTurn = 1; // or 2
 		var prevMoveRow = null;
 		var prevMoveCol = null;
+		var gameInPlay = true;
+
 		opts = opts || {};
 		var solveMode = SOLVE_MODE_STEP,
 				difficulty = "unknown",
@@ -1462,9 +1464,30 @@
 				updateUIBoardCell(cell, {mode: "only-candidates"});
 		};
 
+		// Added in new function to disable the board
+		var disableGame = function() {
+			gameInPlay = false
+
+			// disable board
+			$("input[id^='input-']").each(function(){
+				$(this).prop('disabled', true);
+			});
+
+		}
+
+		var enableGame = function() {
+			gameInPlay = true
+
+			// disable board
+			$("input[id^='input-']").each(function(){
+				$(this).prop('disabled', false);
+			});
+
+		}
 		/* keyboardNumberInput - update our board model
 		 * -----------------------------------------------------------------*/
 		var keyboardNumberInput = function(input, id){
+			if(!gameInPlay) return;
 			var val = parseInt(input.val());
 			if(editingCandidates){
 				toggleCandidateOnCell(val, id);
@@ -1508,7 +1531,7 @@
 							$("#message").text("player " + playerTurn + " loses. Move violates sudoku rules")
 							log("player " + playerTurn + " loses. Move violates sudoku rules")
 							log("#input-" + alreadyExistingCellInHouseWithDigit + ", #input-"+id)
-
+							disableGame()
 							//input was incorrect, so don't update our board model
 							return;
 						}
