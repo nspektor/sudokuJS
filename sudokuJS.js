@@ -460,7 +460,7 @@
             -----------------------------------------------------------------*/
             var clearBoard = function () {
                 resetBoardVariables();
-
+                enableGame();
                 //reset board variable
                 var cands = boardNumbers.slice(0);
                 for (var i = 0; i < boardSize * boardSize; i++) {
@@ -1479,7 +1479,7 @@
 
             // Added in new function to disable the board
             var disableGame = function () {
-                gameInPlay = false
+                gameInPlay = false;
 
                 // disable board
                 $("input[id^='input-']").each(function () {
@@ -1489,11 +1489,15 @@
             }
 
             var enableGame = function () {
-                gameInPlay = true
+                gameInPlay = true;
 
-                // disable board
                 $("input[id^='input-']").each(function () {
+                    // enable board
                     $(this).prop('disabled', false);
+
+                    // Remove any red cells
+                    $(this).removeClass('board-cell--error');
+
                 });
 
             }
