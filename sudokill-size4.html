@@ -3,35 +3,51 @@
 		<meta charset="utf-8">
 		<meta name='viewport' content='width=device-width, initial-scale=1.0'>
 		<link rel="stylesheet" media="all" type="text/css" href="sudokuJS.css">
-		<style>
-			* {
-				margin:0; padding:0;
-				-moz-box-sizing: border-box;
-				-webkit-box-sizing: border-box;
-				box-sizing: border-box;
-			}
-			.wrap {
-				padding: 2em 1em;
-				width: 400px;
-				max-width: 100%;
-				margin-left: auto;
-				margin-right: auto;
-			}
+	<style>
+		* {
+			margin:0; padding:0;
+			-moz-box-sizing: border-box;
+			-webkit-box-sizing: border-box;
+			box-sizing: border-box;
+		}
+		.sudoku-board-cell input {
+			background: none;
+			font-size: 16px;
+		}
 
-			@media(min-width: 30em){
-				.wrap{
-					width: 490px;
-				}
-				.sudoku-board input {
-					font-size: 24px;
-					font-size: 1.5rem;
-				}
-				.sudoku-board .candidates {
-					font-size: .8em;
-				}
-			}
+		.wrap {
+			padding: 2em 1em;
+			width: 400px;
+			max-width: 100%;
+			margin-left: auto;
+			margin-right: auto;
+		}
 
-		</style>
+		@media(min-width: 30em){
+			.sudoku-board .candidates {
+				font-size: .8em;
+			}
+		}
+
+		[data-board-size="4"].sudoku-board .sudoku-board-cell:nth-of-type(4n+1){
+			border-left-width: 2px;
+			border-left-color: #808080;
+		}
+		[data-board-size="4"].sudoku-board .sudoku-board-cell:nth-of-type(n):nth-of-type(-n+4){
+			border-top-width: 2px;
+			border-top-color: #808080;
+		}
+		[data-board-size="4"].sudoku-board .sudoku-board-cell:nth-of-type(2n){
+			border-right-width: 2px;
+			border-right-color: #808080;
+		}
+		[data-board-size="4"].sudoku-board .sudoku-board-cell:nth-of-type(n+5):nth-of-type(-n+8),
+		[data-board-size="4"].sudoku-board .sudoku-board-cell:nth-of-type(n+13):nth-of-type(-n+17) {
+			border-bottom-width: 2px;
+			border-bottom-color: #808080;
+		}
+
+	</style>
 
 		<title>SudoKILL</title>
 
@@ -41,19 +57,13 @@
 
 	<body>
 	<div class="wrap">
+	<div class="wrap">
 		<h1>SudoKILL</h1>
 		<div id="message"></div>
 		<div id="sudoku" class="sudoku-board"></div>
 
 		<!--show candidates toggle-->
 		<label for="toggleCandidates">Show candidates </label><input id="toggleCandidates" class="js-candidate-toggle" type="checkbox"/>
-
-		<!--new board buttons-->
-		<br><button type="button" class="js-generate-board-btn--easy">New Board - Easy</button>
-		<br><button type="button" class="js-generate-board-btn--medium">New Board - Medium</button>
-		<br><button type="button" class="js-generate-board-btn--hard">New Board - Hard</button>
-		<br><button type="button" class="js-generate-board-btn--very-hard">New Board - Very Hard</button>
-
 	</div>
 
 	<script>
@@ -64,25 +74,12 @@
 				$generateBoardBtnVeryHard = $(".js-generate-board-btn--very-hard"),
 
 				mySudokuJS = $("#sudoku").sudokuJS({
-					difficulty: "very hard",
+					boardSize: 4,
 					//change state of our candidate showing checkbox on change in sudokuJS
 					candidateShowToggleFn : function(showing){
 						$candidateToggle.prop("checked", showing);
 					}
 				});
-
-		$generateBoardBtnEasy.on("click", function(){
-			mySudokuJS.generateBoard("easy");
-		});
-		$generateBoardBtnMedium.on("click", function(){
-			mySudokuJS.generateBoard("medium");
-		});
-		$generateBoardBtnHard.on("click", function(){
-			mySudokuJS.generateBoard("hard");
-		});
-		$generateBoardBtnVeryHard.on("click", function(){
-			mySudokuJS.generateBoard("very hard");
-		});
 
 		$candidateToggle.on("change", function(){
 			if($candidateToggle.is(":checked"))
