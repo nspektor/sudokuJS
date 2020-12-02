@@ -54,7 +54,17 @@
 
 			/*highlight new input in board cell*/
 			.sudoku-board-cell .highlight-val {
-				color: #00d;
+				/* color: #00d; */
+			}
+			.player1-color { color: green; }
+			.temp-p1 { color: green; }
+
+			.player2-color {color: blue;}
+			.temp-p2 { color: blue; }
+
+
+			.suggested-cell {
+				background: rgb(255, 255, 126);
 			}
 			/*highligt incorrect input*/
 			.sudoku-board-cell .board-cell--error {

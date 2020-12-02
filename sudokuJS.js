@@ -305,7 +305,7 @@
                     "</div>";
             };
 
-
+            var rowColToId = function(row, col) { return col + (row*boardSize) }
             /* buildCandidatesString
              * -----------------------------------------------------------------*/
             var buildCandidatesString = function (candidatesList) {
@@ -1502,9 +1502,28 @@
                 });
 
             }
+
+            var highlightRowCol = function(r,c) {
+                // for each cell..
+
+                for (var i = 0; i < boardSize; i++) {
+                    var rowId = rowColToId(r,i);
+                    var colId = rowColToId(i,c);
+                    $("#input-" + rowId).parent().addClass('suggested-cell');
+                    $("#input-" + colId).parent().addClass('suggested-cell');
+                    log($("#input-" + rowId + ", #input-" + colId))
+                }
+                
+            }
+            var clearHighlight = function() {
+                $("input[id^='input-']").each(function () {
+                    $(this).parent().removeClass('suggested-cell');
+                });
+            }
             /* keyboardNumberInput - update our board model
              * -----------------------------------------------------------------*/
             var keyboardNumberInput = function (input, id) {
+                clearHighlight();
                 if (!gameInPlay) return;
                 var val = parseInt(input.val());
                 if (editingCandidates) {
@@ -1515,12 +1534,14 @@
                 }
 
                 log(id + ": " + val + " entered.");
-
+                $("#input-" + id).addClass(playerTurn==1 ? 'player1-color' : 'player2-color');
+                log($("#input-" + id).parent())
                 var candidates = getNullCandidatesList(); //[null,null....null];
 
 
                 if (val > 0) { //invalidates Nan
                     var [currMoveRow, currMoveCol] = rowAndColWithCell(id);
+                    highlightRowCol(currMoveRow, currMoveCol);
                     log("prev move row: " + prevMoveRow)
                     log("prev move col: " + prevMoveCol)
                     log("curr move row: " + currMoveRow)
@@ -1852,6 +1873,13 @@
                 if (e.keyCode >= 37 && e.keyCode <= 40) {// || e.keyCode ===48){
                     keyboardMoveBoardFocus(id, e.keyCode);
                 }
+
+                $("#input-" + id).removeClass('temp-p1');
+                $("#input-" + id).removeClass('temp-p2');
+                if(!$("#input-" + id).val()) {
+                    $("#input-" + id).addClass(playerTurn==1 ? 'temp-p2' : 'temp-p1');
+                }
+
             });
             //listen on change because val is incorrect all the time on keyup, because have to filter out all other keys.
             $boardInputs.on("change", function () {
