@@ -36,6 +36,7 @@
             var playerTurn = 1; // or 2
             var prevMoveRow = null;
             var prevMoveCol = null;
+            var prevMoveid = null;
             var gameInPlay = true;
 
             opts = opts || {};
@@ -1558,6 +1559,7 @@
 
                         prevMoveRow = currMoveRow
                         prevMoveCol = currMoveCol
+                        prevMoveid = id
                         playerTurn = playerTurn === 1 ? 2 : 1
                         $("#message").text("player " + playerTurn + "'s turn")
                     } else {
@@ -1565,6 +1567,9 @@
                             "row or column as previous move if there is space available.");
                         log("player " + playerTurn + " loses. Must play in same " +
                             "row or column as previous move if there is space available.")
+                        $("#input-" + prevMoveid + ", #input-" + id).addClass("board-cell--error");
+                        disableGame();
+                        return; //Hopefully this return doesn't result in any issues...
                     }
 
                     setBoardCell(id, val);
@@ -1590,6 +1595,7 @@
                                 //difficultyInfo: null
                             });
                         }
+                        disableGame();
                     }
                 } else {
                     boardError = false; //reset, in case they fixed board - otherwise, we'll find the error again
