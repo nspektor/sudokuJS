@@ -139,6 +139,13 @@
                 return r;
             };
 
+            var resetGameVariables = function() {
+                playerTurn = 1; // or 2
+                prevMoveRow = null;
+                prevMoveCol = null;
+                prevMoveid = null;
+                gameInPlay = true;
+            }
 
             /* calcBoardDifficulty
              * --------------
@@ -268,6 +275,24 @@
             };
 
 
+
+            var solidifyValuesOnBoard = function() {
+
+                // Make original numbers disabled
+                $("input[id^='input-']").each(function () {
+                    if($(this).val()) {
+                        $(this).addClass('original-cell');
+                        $(this).prop('disabled', true);
+                    } else { 
+                        $(this).prop('disabled', false);
+                    }
+                });
+            }
+            var solidifyValue = function(id) {
+                $("#input-" + id).prop('disabled', true);
+            }
+
+
             /* renderBoard
              * --------------
              *  dynamically renders the board on the screen (into the DOM), based on board variable
@@ -289,6 +314,7 @@
                 //save important board elements
                 $boardInputs = $board.find("input");
                 $boardInputCandidates = $board.find(".candidates");
+                solidifyValuesOnBoard();
             };
 
             /* renderBoardCell
@@ -454,6 +480,7 @@
                 onlyUpdatedCandidates = false;
                 usedStrategies = [];
                 gradingMode = false;
+                $("#message").text("");
             };
 
 
@@ -462,6 +489,17 @@
             var clearBoard = function () {
                 resetBoardVariables();
                 enableGame();
+                clearHighlight();
+                // Remove black coloring for original numbers
+                // and disable property for all cells
+                $("input[id^='input-']").each(function () {
+                    // enable board
+                    $(this).prop('disabled', false);
+                    $(this).removeClass('original-cell');
+
+                });
+
+
                 //reset board variable
                 var cands = boardNumbers.slice(0);
                 for (var i = 0; i < boardSize * boardSize; i++) {
@@ -1535,7 +1573,8 @@
 
                 log(id + ": " + val + " entered.");
                 $("#input-" + id).addClass(playerTurn==1 ? 'player1-color' : 'player2-color');
-                log($("#input-" + id).parent())
+                log($("#input-" + id).parent());
+                solidifyValue(id);
                 var candidates = getNullCandidatesList(); //[null,null....null];
 
 
@@ -1845,11 +1884,14 @@
 
                 visualEliminationOfCandidates();
 
+
+                solidifyValuesOnBoard();
+                resetGameVariables();                
+
                 if (typeof callback === 'function') {
                     callback();
                 }
             };
-
 
             /*
              * init/API/events
