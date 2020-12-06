@@ -1542,21 +1542,67 @@
             }
 
             var highlightRowCol = function(r,c) {
-                // for each cell..
+                var all_board_available = true;
 
+                // disable all cells
+                $("input[id^='input-']").each(function () {
+                    $(this).prop('disabled', true);
+                });
+
+                // Check to see if the row/col all has values
                 for (var i = 0; i < boardSize; i++) {
                     var rowId = rowColToId(r,i);
                     var colId = rowColToId(i,c);
-                    $("#input-" + rowId).parent().addClass('suggested-cell');
-                    $("#input-" + colId).parent().addClass('suggested-cell');
-                    log($("#input-" + rowId + ", #input-" + colId))
+
+                    // Either square has a blank space? You don't need to 
+                    // make the entire board free
+                    if(!$("#input-" + rowId).val() || !$("#input-" + colId).val()) {
+                        all_board_available = false;
+                        break;
+                    }
+
                 }
+
+                if(all_board_available) {
+                    // Highlight all the board that isn't an original or a player's move
+                    $("input[id^='input-']").each(function () {
+                        if(!($(this).hasClass("original-cell") || $(this).hasClass("player1-color")  || $(this).hasClass("player2-color"))) {
+                            // enable and highlight
+                            $(this).parent().addClass('suggested-cell');
+                            $(this).prop('disabled', false);
+                        }
+                        
+                    });
+                } else {
+                    // Only highlight a row/col
+                    for (var i = 0; i < boardSize; i++) {
+                        var rowId = rowColToId(r,i);
+                        var colId = rowColToId(i,c);
+    
+                        // enable just the cells that you can move on
+                        $("#input-" + rowId).prop('disabled', false);
+                        $("#input-" + colId).prop('disabled', false);
+    
+                        // highlight the cell
+                        $("#input-" + rowId).parent().addClass('suggested-cell');
+                        $("#input-" + colId).parent().addClass('suggested-cell');
+                    }
+                }
+
                 
             }
             var clearHighlight = function() {
+
                 $("input[id^='input-']").each(function () {
+                    // Clear highlights from everyone
                     $(this).parent().removeClass('suggested-cell');
+
+                    // Remove disabled state for all cells but the originals
+                    if(!($(this).hasClass("original-cell") || $(this).hasClass("player1-color")  || $(this).hasClass("player2-color"))) {
+                        $(this).prop('disabled', false);
+                    }
                 });
+
             }
             /* keyboardNumberInput - update our board model
              * -----------------------------------------------------------------*/
