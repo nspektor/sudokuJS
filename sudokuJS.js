@@ -1539,7 +1539,7 @@
 
             var highlightRowCol = function(r,c) {
                 var all_board_available = true;
-
+                if(!gameInPlay) return; //!  Should prevent post-game highlighting
                 // disable all cells
                 $("input[id^='input-']").each(function () {
                     $(this).prop('disabled', true);
@@ -1576,12 +1576,20 @@
                         var colId = rowColToId(i,c);
     
                         // enable just the cells that you can move on
-                        $("#input-" + rowId).prop('disabled', false);
-                        $("#input-" + colId).prop('disabled', false);
-    
+                        var rq = $("#input-" + rowId);
+                        var cq = $("#input-" + colId);
+
+                        if(!(rq.hasClass("original-cell") || rq.hasClass("player1-color")  || rq.hasClass("player2-color"))) {
+                            rq.prop('disabled', false);
+                        }
+
+                        if(!(cq.hasClass("original-cell") || cq.hasClass("player1-color")  || cq.hasClass("player2-color"))) {
+                            cq.prop('disabled', false);
+                        }
+
                         // highlight the cell
-                        $("#input-" + rowId).parent().addClass('suggested-cell');
-                        $("#input-" + colId).parent().addClass('suggested-cell');
+                        rq.parent().addClass('suggested-cell');
+                        cq.parent().addClass('suggested-cell');
                     }
                 }
 
@@ -1603,9 +1611,21 @@
             /* keyboardNumberInput - update our board model
              * -----------------------------------------------------------------*/
             var keyboardNumberInput = function (input, id) {
-                clearHighlight();
-                if (!gameInPlay) return;
+                // Whats the input 
                 var val = parseInt(input.val());
+
+                // Clear if input is good (Don't clear on bad input)
+                if(!isNaN(val)) clearHighlight(); 
+
+                // Always clear if the game is over
+                if (!gameInPlay) {
+                    clearHighlight(); 
+                    return;
+                }
+
+                // don't keep going if the input was bad
+                if(isNaN(val)) return;
+
                 if (editingCandidates) {
                     toggleCandidateOnCell(val, id);
                     // reset value on board
