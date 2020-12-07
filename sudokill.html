@@ -75,10 +75,6 @@
     <button type="button" class="button button1 js-generate-board-btn--easy">Very Filled In (Recommended)</button>
     <button type="button" class="button button1 js-generate-board-btn--medium">Medium Filled In</button>
     <button type="button" class="button button1 js-generate-board-btn--hard">Not Very Filled In</button>
-    <button type="button" class="button button1 js-generate-board-btn--very-hard">Barely Filled In (Might take a long
-        time)
-    </button>
-
 </div>
 
 <script>
@@ -86,10 +82,9 @@
         $generateBoardBtnEasy = $(".js-generate-board-btn--easy"),
         $generateBoardBtnMedium = $(".js-generate-board-btn--medium"),
         $generateBoardBtnHard = $(".js-generate-board-btn--hard"),
-        $generateBoardBtnVeryHard = $(".js-generate-board-btn--very-hard"),
 
         mySudokuJS = $("#sudoku").sudokuJS({
-            difficulty: "very hard",
+            difficulty: "hard",
             //change state of our candidate showing checkbox on change in sudokuJS
             candidateShowToggleFn: function (showing) {
                 $candidateToggle.prop("checked", showing);
@@ -104,9 +99,6 @@
     });
     $generateBoardBtnHard.on("click", function () {
         mySudokuJS.generateBoard("hard");
-    });
-    $generateBoardBtnVeryHard.on("click", function () {
-        mySudokuJS.generateBoard("very hard");
     });
 
     $candidateToggle.on("change", function () {

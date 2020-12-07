@@ -296,11 +296,6 @@
              *  dynamically renders the board on the screen (into the DOM), based on board variable
              * -----------------------------------------------------------------*/
             var renderBoard = function () {
-                $("#message").text(
-                    "Player 1 can begin by placing a number anywhere on the board.  " +
-                    "Player 1 will be green. " +
-                    "Player 2 will be blue.")
-                $("#message").removeClass().addClass('player1-color');
                 //log("renderBoard");
                 //log(board);
                 var htmlString = "";
@@ -582,8 +577,6 @@
                 // log("numbers left in col: " + openCells(prev_col))
                 var space_in_prev_row = openCells(0, prev_row)
                 var space_in_prev_col = openCells(1, prev_col)
-                log("space in previous row? " + space_in_prev_row)
-                log("space in previous col? " + space_in_prev_col)
                 if (space_in_prev_row && curr_row === prev_row) {
                     // row has space and player went in same row
                     return true;
@@ -595,7 +588,7 @@
                 // if (board[prev_row].val != null && board[prev_col].val != null) {
                 else {
                     // row and column have space but player moved elsewhere
-                    log("wrong col/row" + curr_row + curr_col + prev_row + prev_col)
+                    // log("wrong col/row" + curr_row + curr_col + prev_row + prev_col)
                     return false
                 }
             };
@@ -1620,9 +1613,9 @@
                     return;
                 }
 
-                log(id + ": " + val + " entered.");
+                // log(id + ": " + val + " entered.");
                 $("#input-" + id).addClass(playerTurn==1 ? 'player1-color' : 'player2-color');
-                log($("#input-" + id).parent());
+                // log($("#input-" + id).parent());
                 solidifyValue(id);
                 var candidates = getNullCandidatesList(); //[null,null....null];
 
@@ -1630,10 +1623,10 @@
                 if (val > 0) { //invalidates Nan
                     var [currMoveRow, currMoveCol] = rowAndColWithCell(id);
                     highlightRowCol(currMoveRow, currMoveCol);
-                    log("prev move row: " + prevMoveRow)
-                    log("prev move col: " + prevMoveCol)
-                    log("curr move row: " + currMoveRow)
-                    log("curr move col: " + currMoveCol)
+                    // log("prev move row: " + prevMoveRow)
+                    // log("prev move col: " + prevMoveCol)
+                    // log("curr move row: " + currMoveRow)
+                    // log("curr move col: " + currMoveCol)
                     if (validCell(currMoveRow, currMoveCol, prevMoveRow, prevMoveCol)) {
                         //check that this doesn't make board incorrect
                         var housesOfCurrCell = housesWithCell(id);
@@ -1645,12 +1638,11 @@
                                 //digit already in house - board incorrect with user input
                                 // edit this to comply with new logic
                                 //
-                                log("board incorrect!");
+                                // log("board incorrect!");
                                 var alreadyExistingCellInHouseWithDigit = houses[i][housesOfCurrCell[i]][currIndexInHouse];
 
                                 //this happens in candidate mode, if we highlight on ui board before entering value, and user then enters before us.
                                 if (alreadyExistingCellInHouseWithDigit === id) {
-                                    log("something about candidate mode")
                                     continue;
                                 }
 
@@ -1659,8 +1651,8 @@
                                 //mark as incorrect in UI
                                 $("#message").text("Player " + playerTurn + " loses 🙁 Move violates sudoku rules")
                                 $("#message").removeClass().addClass(playerTurn==1 ? 'player1-color' : 'player2-color');
-                                log("player " + playerTurn + " loses. Move violates sudoku rules")
-                                log("bad move at #input-" + alreadyExistingCellInHouseWithDigit + ", #input-" + id)
+                                // log("player " + playerTurn + " loses. Move violates sudoku rules")
+                                // log("bad move at #input-" + alreadyExistingCellInHouseWithDigit + ", #input-" + id)
                                 disableGame()
                                 //input was incorrect, so don't update our board model
                                 return;
@@ -1677,8 +1669,8 @@
                         $("#message").text("Player " + playerTurn + " loses 🙁 Must play in same " +
                             "row or column as previous move if there is space available.");
                         $("#message").removeClass().addClass(playerTurn===1 ? 'player1-color' : 'player2-color');
-                        log("Player " + playerTurn + " loses. Must play in same " +
-                            "row or column as previous move if there is space available.")
+                        // log("Player " + playerTurn + " loses. Must play in same " +
+                        //     "row or column as previous move if there is space available.")
                         $("#input-" + prevMoveid + ", #input-" + id).addClass("board-cell--error");
                         disableGame();
                         return; //Hopefully this return doesn't result in any issues...
@@ -1698,7 +1690,7 @@
                         boardFinished = true;
                         $("#message").text("player " + playerTurn + " wins by finishing the board!");
                         $("#message").removeClass().addClass(playerTurn==1 ? 'player1-color' : 'player2-color');
-                        log("player " + playerTurn + " wins by finishing the board!");
+                        // log("player " + playerTurn + " wins by finishing the board!");
                         if (typeof opts.boardFinishedFn === "function") {
                             opts.boardFinishedFn({
                                 //we rate the board via what strategies was used to solve it
@@ -1944,6 +1936,11 @@
                 if (typeof callback === 'function') {
                     callback();
                 }
+                $("#message").text(
+                    "Player 1 can begin by placing a number anywhere on the board.  " +
+                    "Player 1 will be green. " +
+                    "Player 2 will be blue.")
+                $("#message").removeClass().addClass('player1-color');
             };
 
             /*
