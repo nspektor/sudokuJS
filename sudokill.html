@@ -57,16 +57,20 @@
 	   </pre>
         <h5 style="text-align: center">A Team Marshmallow Game </h5>
     </h5>
-    <div id="message">
-        Player 1 can begin by placing a number anywhere on the board.
-        <br>Player 1 will be green.
-        <br>Player 2 will be blue.
-    </div>
-    <div id="sudoku" class="sudoku-board"></div>
-
+    <div id="message"></div>
     <!--show candidates toggle-->
-    <label for="toggleCandidates" style="font-size: 1.25rem;">Show candidates for each square</label>
     <input id="toggleCandidates" class="js-candidate-toggle" type="checkbox"/>
+    <label for="toggleCandidates" style="font-size: 1.25rem;">Show candidates for each square</label>
+    <div id="sudoku" class="sudoku-board"></div>
+    <div style="background-color: lightblue; padding: .5em; font-size: 1.25rem;">
+        <div style="text-align: center; font-weight: bold;">Instructions</div>
+        Player 1 can begin by placing a number anywhere on the board and pressing enter.<br>
+        On all subsequent turns, valid squares will be highlighted yellow and you should
+        make a move by placing a number in one of the yellow-highlighted squares and press enter.
+        <div style="color: green;">Player 1's moves are green.</div>
+        <div style="color: blue;">Player 2's moves are blue.</div>
+    </div>
+
 </div>
 <!--new board buttons-->
 <div class="new-game-area">
@@ -84,7 +88,7 @@
         $generateBoardBtnHard = $(".js-generate-board-btn--hard"),
 
         mySudokuJS = $("#sudoku").sudokuJS({
-            difficulty: "hard",
+            difficulty: "easy",
             //change state of our candidate showing checkbox on change in sudokuJS
             candidateShowToggleFn: function (showing) {
                 $candidateToggle.prop("checked", showing);

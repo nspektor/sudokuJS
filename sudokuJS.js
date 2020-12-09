@@ -577,6 +577,9 @@
                 // log("numbers left in col: " + openCells(prev_col))
                 var space_in_prev_row = openCells(0, prev_row)
                 var space_in_prev_col = openCells(1, prev_col)
+                if (space_in_prev_col === false && space_in_prev_row === false){
+                    return true
+                }
                 if (space_in_prev_row && curr_row === prev_row) {
                     // row has space and player went in same row
                     return true;
@@ -1683,7 +1686,7 @@
                         prevMoveCol = currMoveCol
                         prevMoveid = id
                         playerTurn = playerTurn === 1 ? 2 : 1
-                        $("#message").text("Player " + playerTurn + "'s turn")
+                        $("#message").text("Player " + playerTurn + "'s turn.")
                         $("#message").removeClass().addClass(playerTurn===1 ? 'player1-color' : 'player2-color');
                     } else {
                         $("#message").text("Player " + playerTurn + " loses 🙁 Must play in same " +
@@ -1956,10 +1959,7 @@
                 if (typeof callback === 'function') {
                     callback();
                 }
-                $("#message").text(
-                    "Player 1 can begin by placing a number anywhere on the board.  " +
-                    "Player 1 will be green. " +
-                    "Player 2 will be blue.")
+                $("#message").text("Player 1's turn")
                 $("#message").removeClass().addClass('player1-color');
             };
 
