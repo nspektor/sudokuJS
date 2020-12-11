@@ -64,17 +64,17 @@
     <div id="sudoku" class="sudoku-board"></div>
     <div>  
         <label for="p1-name">Player 1 Name:</label>
-        <input type="text" id="p1-name" name="p1-name" value="Player 1"><br><br>
+        <input type="text" id="p1-name" name="p1-name" value="Player 1" onchange="player1change()"><br><br>
         <label for="p2-name">Player 2 Name:</label>
-        <input type="text" id="p2-name" name="p2-name" value="Player 2"><br><br>
+        <input type="text" id="p2-name" name="p2-name" value="Player 2" onchange="player2change()"><br><br>
     </div>
     <div style="background-color: lightblue; padding: .5em; font-size: 1.25rem;">
         <div style="text-align: center; font-weight: bold;">Instructions</div>
         Player 1 can begin by placing a number anywhere on the board and pressing enter.<br>
         On all subsequent turns, valid squares will be highlighted yellow and you should
         make a move by placing a number in one of the yellow-highlighted squares and press enter.
-        <div style="color: green;">Player 1's moves are green.</div>
-        <div style="color: blue;">Player 2's moves are blue.</div>
+        <div style="color: green;"><span id="p1-tutorial">Player 1</span>'s moves are green.</div>
+        <div style="color: blue;"> <span id="p2-tutorial">Player 2</span>'s moves are blue.</div>
     </div>
 
 </div>
@@ -88,6 +88,12 @@
 </div>
 
 <script>
+    function player1change() {
+        $("#p1-tutorial").text($("#p1-name").val())
+    }
+    function player2change() {
+        $("#p2-tutorial").text($("#p2-name").val())
+    }
     var $candidateToggle = $(".js-candidate-toggle"),
         $generateBoardBtnEasy = $(".js-generate-board-btn--easy"),
         $generateBoardBtnMedium = $(".js-generate-board-btn--medium"),
