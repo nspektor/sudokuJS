@@ -1672,7 +1672,7 @@
                                 $("#input-" + alreadyExistingCellInHouseWithDigit + ", #input-" + id)
                                     .addClass("board-cell--error");
                                 //mark as incorrect in UI
-                                $("#message").text("Player " + playerTurn + " loses 🙁 Move violates sudoku rules")
+                                $("#message").text($("#p"+playerTurn+"-name").val() + " loses 🙁 Move violates sudoku rules")
                                 $("#message").removeClass().addClass(playerTurn==1 ? 'player1-color' : 'player2-color');
                                 // log("player " + playerTurn + " loses. Move violates sudoku rules")
                                 // log("bad move at #input-" + alreadyExistingCellInHouseWithDigit + ", #input-" + id)
@@ -1686,10 +1686,10 @@
                         prevMoveCol = currMoveCol
                         prevMoveid = id
                         playerTurn = playerTurn === 1 ? 2 : 1
-                        $("#message").text("Player " + playerTurn + "'s turn.")
+                        $("#message").text($("#p"+playerTurn+"-name").val() + "'s turn.")
                         $("#message").removeClass().addClass(playerTurn===1 ? 'player1-color' : 'player2-color');
                     } else {
-                        $("#message").text("Player " + playerTurn + " loses 🙁 Must play in same " +
+                        $("#message").text($("#p"+playerTurn+"-name").val() + " loses 🙁 Must play in same " +
                             "row or column as previous move if there is space available.");
                         $("#message").removeClass().addClass(playerTurn===1 ? 'player1-color' : 'player2-color');
                         // log("Player " + playerTurn + " loses. Must play in same " +
@@ -1711,7 +1711,7 @@
                     //check if that finished board
                     if (isBoardFinished()) {
                         boardFinished = true;
-                        $("#message").text("player " + playerTurn + " wins by finishing the board!");
+                        $("#message").text($("#p"+playerTurn+"-name").val() + " wins by finishing the board!");
                         $("#message").removeClass().addClass(playerTurn==1 ? 'player1-color' : 'player2-color');
                         // log("player " + playerTurn + " wins by finishing the board!");
                         if (typeof opts.boardFinishedFn === "function") {
@@ -1959,7 +1959,8 @@
                 if (typeof callback === 'function') {
                     callback();
                 }
-                $("#message").text("Player 1's turn")
+                $
+                $("#message").text($("#p1-name").val()+"'s turn")
                 $("#message").removeClass().addClass('player1-color');
             };
 
